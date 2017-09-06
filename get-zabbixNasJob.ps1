@@ -33,9 +33,7 @@ function Get-ZabbixNasJob
 
         #$date = (Get-Date).Addminutes(-5)
         $duration = (Get-Date).addhours(-6)
-
     )
-
 
     Process{
 
@@ -53,6 +51,5 @@ function Get-ZabbixNasJob
     End
     {
         write-output " 2 measurement for zabbix $($files.count)"
-
     }
 }
