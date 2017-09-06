@@ -4,22 +4,25 @@
 
     .DESCRIPTION
     if the file has more than 5 minutes on its last wirte time then the file has not been succesfully copied to the NAS server
-    
+
+    .EXAMPLE
+    Get-ZabbixNasJob -path 'C:\windows\help'
+
     .NOTES
     GCI Wrapper for Nayana
     #>
 function Get-ZabbixNasJob
 {
     [CmdletBinding()]
- 
+
     Param
     (
-        # Madaory for Path, accepts pipeline 
+        # Madaory for Path, accepts pipeline
         [Parameter(Mandatory=$true,
                    ValueFromPipelineByPropertyName=$true,
                    Position=0)]
         [String]
-        $path = 'C:\windows\help',
+        $path,
 
         # Param2 help description
         [string]
@@ -28,11 +31,12 @@ function Get-ZabbixNasJob
         [string]
         $include = "*.ps1",
 
+        #$date = (Get-Date).Addminutes(-5)
         $duration = (Get-Date).addhours(-6)
-                
+
     )
 
-   
+
     Process{
 
         if(-not (test-path $path)){
@@ -41,12 +45,8 @@ function Get-ZabbixNasJob
             Write-Host "path $($path) is accessible :) " -ForegroundColor Green
         }
 
-        #$date = (Get-Date).Addminutes(-5)
-        #$duration = (Get-Date).addhours(-6)
-
-        
-        $files = get-childitem -path $path -recurse -include "$include" -exclude "$exclude"| 
-        where-object {$_.LastWriteTimeUtc -gt $duration } | 
+        $files = get-childitem -path $path -recurse -include "$include" -exclude "$exclude"|
+        where-object {$_.LastWriteTimeUtc -gt $duration } |
         select fullname ,LastWriteTimeUtc
 
      }
@@ -54,5 +54,5 @@ function Get-ZabbixNasJob
     {
         write-output " 2 measurement for zabbix $($files.count)"
 
-    }  
-}; Get-ZabbixNasJob -path . 
+    }
+}
