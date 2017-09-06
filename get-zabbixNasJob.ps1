@@ -29,7 +29,7 @@ function Get-ZabbixNasJob
         $include = "*.ps1",
 
         $duration = (Get-Date).addhours(-6)
-
+                
     )
 
    
@@ -45,16 +45,14 @@ function Get-ZabbixNasJob
         #$duration = (Get-Date).addhours(-6)
 
         
-        $files = get-childitem -path $path -recurse -include "$include" -exclude "*.ni.*"| 
+        $files = get-childitem -path $path -recurse -include "$include" -exclude "$exclude"| 
         where-object {$_.LastWriteTimeUtc -gt $duration } | 
         select fullname ,LastWriteTimeUtc
-        
-        
-    }
+
+     }
     End
     {
-        
-        Write-host "measurement for zabbix $($files.count)"
+        write-output " 2 measurement for zabbix $($files.count)"
 
     }  
-}
+}; Get-ZabbixNasJob -path . 
