@@ -1,5 +1,5 @@
 ﻿   <#
-    .SYSNOPSIS
+    .SYNOPSIS
     Wrapper for GCI, works by checking the duration of the last work write on the files being copied to the nas
 
     .DESCRIPTION
@@ -48,10 +48,13 @@ function Get-ZabbixNasJob
         $files = get-childitem -path $path -recurse -include "$include" -exclude "*.ni.*"| 
         where-object {$_.LastWriteTimeUtc -gt $duration } | 
         select fullname ,LastWriteTimeUtc
-        $files
+        
         
     }
     End
     {
-    }
+        
+        Write-host "measurement for zabbix $($files.count)"
+
+    }  
 }
